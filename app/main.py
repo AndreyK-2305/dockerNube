@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 import os
 
 app = FastAPI()
-DATA_FILE = "/data/notas.txt"
+DATA_FILE = "/data/notas.txt" 
 
 @app.post("/nota")
 async def guardar_nota(request: Request):
@@ -25,3 +25,7 @@ def leer_notas():
 @app.get("/conteo")
 def contar_notas():
     return len(leer_notas()["notas"])
+
+@app.get("/autor")
+def get_autor():
+    return os.environ.get('AUTOR')
