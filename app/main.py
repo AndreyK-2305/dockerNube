@@ -21,3 +21,7 @@ def leer_notas():
 
     notas = [linea.replace("\\n", "\n") for linea in lineas]
     return {"notas": notas}
+
+@app.get("/conteo")
+def contar_notas():
+    return len(leer_notas()["notas"])
