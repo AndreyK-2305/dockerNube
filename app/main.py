@@ -8,12 +8,16 @@ DATA_FILE = "/data/notas.txt"
 async def guardar_nota(request: Request):
     nota = await request.body()
     with open(DATA_FILE, "a") as f:
-        f.write(nota.decode() + "\\n")
+        f.write(nota.decode().replace("\n", "\\n") + "\n")
     return {"status": "Nota saved"}
 
 @app.get("/")
 def leer_notas():
     if not os.path.exists(DATA_FILE):
         return {"notas": []}
-    with open(DATA_FILE, "r") as f:
-        return {"notas": f.read().splitlines()}
+
+    with open(DATA_FILE, "r", encoding="utf-8") as f:
+        lineas = f.read().splitlines()
+
+    notas = [linea.replace("\\n", "\n") for linea in lineas]
+    return {"notas": notas}
