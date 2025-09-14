@@ -7,3 +7,24 @@ services:
       - ./data:/data
     environment:
       AUTOR: Juan y Kevin
+      DB_HOST: postgres
+      DB_NAME: mydb
+      DB_USER: myuser
+      DB_PASS: mypass
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypass
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d mydb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
